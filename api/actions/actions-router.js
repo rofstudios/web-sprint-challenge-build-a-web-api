@@ -3,6 +3,7 @@ let express = require('express');
 let router = express.Router();
 
 let actionsDB = require('./actions-model');
+let { verifyBody } = require('./actions-middlware');
 
 router.get('/', (req, res) => {
     actionsDB.get()
@@ -33,13 +34,13 @@ router.post("/", (req, res) => {
         if (!newA.notes || !newA.description || !newA.project_id) {
             res.status(400).json({ message: "Requires description, notes and project_id" })
         } else {
-            actionsDB.insert(newA)
-                .then(action => {
-                    res.status(201).json(action)
-                })
-                .catch(err => {
-                    res.status(500).json({ err, message: "Unable to process request" })
-                })
+    actionsDB.insert(newA)
+        .then(action => {
+            res.status(201).json(action)
+        })
+        .catch(err => {
+            res.status(500).json({ err, message: "Unable to process request" })
+        })
         }
     } else {
         res.status(404).json({ message: "Missing data" })

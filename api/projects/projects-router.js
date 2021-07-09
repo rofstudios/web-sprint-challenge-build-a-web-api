@@ -4,6 +4,8 @@ let router = express.Router();
 
 let projectDB = require('./projects-model');
 
+let {verifyBody} = require('./projects-middleware');
+
 router.get('/', (req, res) => {
     projectDB.get()
         .then(projects => {
@@ -33,13 +35,13 @@ router.get('/:id', (req, res) => {
         })
 })
 
-function verifyBody(req, res, next) {
-    if (!req.body.name || !req.body.description) {
-        res.status(400).json({ message: "Name and Description required" })
-    } else {
-        next();
-    }
-}
+// function verifyBody(req, res, next) {
+//     if (!req.body.name || !req.body.description) {
+//         res.status(400).json({ message: "Name and Description required" })
+//     } else {
+//         next();
+//     }
+// }
 
 router.post('/', verifyBody, (req, res) => {
     let newP = req.body;
@@ -89,9 +91,12 @@ router.post('/', verifyBody, (req, res) => {
 router.put('/:id', (req, res) => {
     let newP = req.body;
     let id = req.params.id;
-
-    if (!newP.name && !newP.description && !newP.completed) {
-        res.status(400).json({ message: "Missing name description and completed" })
+    // console.log(newP, "This is newP")
+    // console.log(id,'This is id')
+    // if (!newP.name || !newP.description || !newP.completed) {
+    if (!newP.name || !newP.description) {
+        
+        res.status(400).json({ message: "Missing name, description and completed" })
     } else {
         projectDB.get(id)
             .then(project => {
@@ -100,6 +105,7 @@ router.put('/:id', (req, res) => {
                 } else {
                     projectDB.update(id, newP)
                         .then(updateProject => {
+                            console.log(updateProject, "update project")
                             res.status(200).json(updateProject);
                         })
                 }
