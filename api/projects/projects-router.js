@@ -130,29 +130,29 @@ router.put('/:id', (req, res) => {
     router.delete("/:id", (req, res) => {
         let { id } = req.params;
         projectDB.remove(id)
-        .then(count => {
-            if(count > 0) {
-                res.status(200).json({ message: `Successfully deleted action with ID ${id}` })
-            } else {
-                res.status(404).json({ message: `Could not find project to delete with ID ${id}` })
-            }
-        })
-        .catch(err => res.status(500).json({ err, message: "Could not process delete request" }))
+            .then(count => {
+                if (count > 0) {
+                    res.status(200).json({ message: `Successfully deleted action with ID ${id}` })
+                } else {
+                    res.status(404).json({ message: `Could not find project to delete with ID ${id}` })
+                }
+            })
+            .catch(err => res.status(500).json({ err, message: "Could not process delete request" }))
     })
 })
 
 router.get("/:id/actions", (req, res) => {
-    let {projectID} = req.params;
+    let { id } = req.params;
 
-    projectDB.getProjectActions(projectID)
-    .then(actions => {
-        if(!actions){
-            res.status(404).json({ message: "No data found with that ID" })
-        } else {
-        res.status(200).json(actions)
-        }
-    })
-    .catch(err => res.status(500).json({ err, message: "Could not get actions from DB" }))
+    projectDB.getProjectActions(id)
+        .then(actions => {
+            if (!actions) {
+                res.status(404).json({ message: "No data found with that ID" })
+            } else {
+                res.status(200).json(actions)
+            }
+        })
+        .catch(err => res.status(500).json({ err, message: "Could not get actions from DB" }))
 
 })
 
