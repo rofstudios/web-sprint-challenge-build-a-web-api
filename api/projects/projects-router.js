@@ -33,13 +33,21 @@ router.get('/:id', (req, res) => {
         })
 })
 
-router.post('/', (req, res) => {
+function verifyBody(req, res, next) {
+    if (!req.body.name || !req.body.description) {
+        res.status(400).json({ message: "Name and Description required" })
+    } else {
+        next();
+    }
+}
+
+router.post('/', verifyBody, (req, res) => {
     let newP = req.body;
     // requires name and description
-    if (newP) {
-        if (!newP.name || !newP.description) {
-            res.status(400).json({ message: 'Name and Description required' })
-        } else {
+    // if (newP) {
+        // if (!newP.name || !newP.description) {
+            // res.status(400).json({ message: 'Name and Description required' })
+        // } else {
             projectDB.insert(newP)
                 .then(project => {
                     // res.status(201).json({ message: 'Successfully added new project', project });
@@ -48,12 +56,12 @@ router.post('/', (req, res) => {
                 .catch(err => {
                     res.status(500).json({ err, message: 'Unable to process request' });
                 })
-        }
-    } else {
-        res.status(400).json({ message: "No new project data found" });
-    }
+        })
+    // } else {
+        // res.status(400).json({ message: "No new project data found" });
+    // }
 
-})
+// })
 
 // router.put('/:id', (req, res) => {
 //     let newP = req.body;

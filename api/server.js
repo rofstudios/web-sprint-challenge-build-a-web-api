@@ -10,6 +10,7 @@ let actionsRoutes = require('./actions/actions-router');
 const server = express();
 server.use(express.json());
 server.use(helmet());
+server.use(logger);
 
 // Router Endpoints
 server.use('/api/projects', projectRoutes);
@@ -18,6 +19,16 @@ server.use('/api/actions', actionsRoutes);
 server.use('/',(req, res) => {
     res.json({ message: 'Could not serve' })
 })
+
+function logger(req, res, next) {
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
+        'Origin'
+      )}`
+    );
+  
+    next();
+  }
 
 
 module.exports = server;
