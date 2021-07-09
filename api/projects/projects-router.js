@@ -91,10 +91,10 @@ router.post('/', verifyBody, (req, res) => {
 router.put('/:id', (req, res) => {
     let newP = req.body;
     let id = req.params.id;
-    // console.log(newP, "This is newP")
-    // console.log(id,'This is id')
-    // if (!newP.name || !newP.description || !newP.completed) {
-    if (!newP.name || !newP.description) {
+
+    // if ((req.body.name===null||req.body.name===undefined) || (req.body.description===null||req.body.description===undefined) || (req.body.completed===null ||req.body.completed===undefined)){
+
+    if (!newP.name || !newP.description || typeof newP.completed === "undefined") {
         
         res.status(400).json({ message: "Missing name, description and completed" })
     } else {
